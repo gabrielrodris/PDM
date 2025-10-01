@@ -7,6 +7,8 @@ import ToqueSimples from "./screens/ToqueSimples";
 import Rotacao from "./screens/Rotacao";
 import PinchZoom from "./screens/PinchZoom";
 import FlatList from "./screens/FlatList";
+import Gps from "./screens/Gps";
+import Wifi from "./screens/Wifi";
 
 const Drawer = createDrawerNavigator();
 export default function App() {
@@ -19,6 +21,8 @@ export default function App() {
         <Drawer.Screen name="Rotação" component={Rotacao} />
         <Drawer.Screen name="Pinch e Zoom" component={PinchZoom} />
         <Drawer.Screen name="FlatList" component={FlatList} />
+        <Drawer.Screen name="Gps" component={Gps} />
+        <Drawer.Screen name="Wi-fi"component={Wifi} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
