@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [sound, setSound] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(null);
+  const [isPlaying, setIsPlaying] = useState("parado");
 
   async function playSound() {
     if (!sound) {
@@ -17,14 +17,22 @@ export default function App() {
       setIsPlaying(true);
     } else {
       await sound.playAsync();
-      setIsPlaying(false);
+      setIsPlaying("tocando");
     }
   }
 
   async function pauseSound() {
     if (sound) {
       await sound.pauseAsync();
-      setIsPlaying(false);
+      setIsPlaying("pausado");
+    }
+  }
+
+  async function stopSound() {
+    if (sound) {
+      await sound.stopAsync();
+      await sound.setPositionAsync(0);
+      setIsPlaying("parado");
     }
   }
 
@@ -35,4 +43,28 @@ export default function App() {
       }
     };
   }, [sound]);
+
+  return (
+    <>
+      <View style={styles.container}>
+        <Text style={styles.title}>Reprodutor de Audio</Text>
+        <Button title="Play" onPress={playSound}></Button>
+        <Button title="Pause" onPress={pauseSound}></Button>
+        <Button title="Stop" onPress={stopSound}></Button>
+      </View>
+    </>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: 20,
+  },
+});
