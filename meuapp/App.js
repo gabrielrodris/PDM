@@ -10,8 +10,11 @@ import FlatList from "./screens/FlatList";
 import Gps from "./screens/Gps";
 import Wifi from "./screens/Wifi";
 import Som from "./screens/Som";
+import Storage from "./screens/Storage";
 /*import Mapa from "./screens/Mapa";*/
 import Camera from "./screens/Camera";
+import Acelerometro from "./screens/Acelerometro";
+import StorageExternal from "./screens/StorageExternal"
 
 const Drawer = createDrawerNavigator();
 export default function App() {
@@ -27,8 +30,11 @@ export default function App() {
         <Drawer.Screen name="Gps" component={Gps} />
         <Drawer.Screen name="Wi-fi" component={Wifi} />
         <Drawer.Screen name="Som" component={Som} />
+        <Drawer.Screen name="Storage" component={Storage} />
         {/*<Drawer.Screen name="Mapa" component={Mapa} />*/}
         <Drawer.Screen name="Camera" component={Camera} />
+        <Drawer.Screen name="Acelerometro" component={Acelerometro} />
+        <Drawer.Screen name="StorageExternal" component={StorageExternal} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
