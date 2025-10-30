@@ -5,10 +5,10 @@ import {
   Text,
   StyleSheet,
   View,
-  UseState,
   TextInput,
   TouchableOpacity,
 } from "react-native";
+
 export default function App() {
   const [frutas, setFrutas] = useState([
     { id: "1", nome: "🍎 Maçã" },
@@ -17,19 +17,20 @@ export default function App() {
   ]);
 
   const [novaFruta, setNovaFruta] = useState("");
-  // function adiconar frutas
+  // function adicionar frutas
   const adicionarFruta = () => {
     if (novaFruta.trim() === "") return;
     const nova = {
-      id: Date.now().toString(),
+      // usa timestamp + random para reduzir chance de colisão de key
+      id: `${Date.now().toString()}_${Math.floor(Math.random() * 100000)}`,
       nome: novaFruta,
     };
-    setFrutas([...frutas, nova]);
+    setFrutas((prev) => [...prev, nova]);
     setNovaFruta("");
   };
 
   const removerFruta = (id) => {
-    setFrutas(frutas.filter((item) => item.id !== id));
+    setFrutas((prev) => prev.filter((item) => item.id !== id));
   };
 
   const renderItem = ({ item }) => (
@@ -53,16 +54,16 @@ export default function App() {
           placeholder="Digite algo"
           value={novaFruta}
           onChangeText={setNovaFruta}
-        ></TextInput>
-         <TouchableOpacity style={styles.botao} onPress={adicionarFruta}>
+        />
+        <TouchableOpacity style={styles.botao} onPress={adicionarFruta}>
           <Text style={styles.botaoTexto}>Adicionar</Text>
         </TouchableOpacity>
       </View>
       <FlatList
         data={frutas}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      ></FlatList>
+        keyExtractor={(item) => String(item.id)}
+      />
     </SafeAreaView>
   );
 }

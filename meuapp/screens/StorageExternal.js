@@ -1,22 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
+
 import * as FileSystem from "expo-file-system/legacy";
 
 export default function App() {
   const [inputText, setInputText] = useState("");
   const [savedText, setSavedText] = useState("");
 
-  // Caminho do arquivo dentro do armazenamento do app
+  
   const fileUri = FileSystem.documentDirectory + "meuArquivo.txt";
+
+  useEffect(() => {
+    
+    readFromFile();
+  }, []);
 
   // Função para salvar o texto no arquivo
   const saveToFile = async () => {
     try {
-      await FileSystem.writeAsStringAsync(fileUri, inputText);
+      await FileSystem.writeAsStringAsync(fileUri, inputText ?? "", {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
       Alert.alert("Sucesso", "Arquivo salvo com sucesso!");
       setInputText(""); // limpa o campo após salvar
+      setSavedText(inputText ?? "");
     } catch (e) {
-      Alert.alert("Erro", "Erro ao salvar arquivo: " + e.message);
+      Alert.alert("Erro", "Erro ao salvar arquivo: " + (e?.message || e));
     }
   };
 
@@ -25,22 +34,38 @@ export default function App() {
     try {
       const fileInfo = await FileSystem.getInfoAsync(fileUri);
       if (!fileInfo.exists) {
-        Alert.alert("Aviso", "Nenhum arquivo encontrado ainda!");
+        setSavedText("");
         return;
       }
 
-      const content = await FileSystem.readAsStringAsync(fileUri);
+      const content = await FileSystem.readAsStringAsync(fileUri, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
       setSavedText(content);
     } catch (e) {
-      Alert.alert("Erro", "Erro ao ler arquivo: " + e.message);
+      Alert.alert("Erro", "Erro ao ler arquivo: " + (e?.message || e));
+    }
+  };
+
+  // Função para apagar o arquivo
+  const deleteFile = async () => {
+    try {
+      const fileInfo = await FileSystem.getInfoAsync(fileUri);
+      if (fileInfo.exists) {
+        await FileSystem.deleteAsync(fileUri);
+        setSavedText("");
+        Alert.alert("Sucesso", "Arquivo removido.");
+      } else {
+        Alert.alert("Aviso", "Nenhum arquivo para remover.");
+      }
+    } catch (e) {
+      Alert.alert("Erro", "Erro ao remover arquivo: " + (e?.message || e));
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Armazenamento Externo com Expo FileSystem
-      </Text>
+      <Text style={styles.title}>Armazenamento com Expo FileSystem</Text>
 
       <TextInput
         style={styles.input}
@@ -51,9 +76,13 @@ export default function App() {
 
       <Button title="💾 Salvar no Arquivo" onPress={saveToFile} />
 
-      <View style={{ height: 20 }} />
+      <View style={{ height: 10 }} />
 
       <Button title="📖 Ler do Arquivo" onPress={readFromFile} />
+
+      <View style={{ height: 10 }} />
+
+      <Button title="🗑️ Apagar Arquivo" onPress={deleteFile} color="#d00" />
 
       <Text style={styles.savedText}>
         <Text style={{ fontWeight: "bold" }}>Conteúdo salvo:</Text>{" "}
