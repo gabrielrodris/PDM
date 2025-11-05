@@ -13,7 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 
-export default function LongPress() {
+export default function App() {
   const [message, setMessage] = useState("Pressione e segure o quadrado 👇");
   const [isPressed, setIsPressed] = useState(false);
   const [pressCount, setPressCount] = useState(0);
@@ -76,6 +76,7 @@ export default function LongPress() {
         setPressCount((prev) => prev + 1);
         setMessage("🎉 Você fez um toque longo!");
 
+        // Animação de confirmação
         Animated.sequence([
           Animated.timing(scaleAnim, {
             toValue: 0.8,
@@ -114,12 +115,14 @@ export default function LongPress() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
         <Ionicons name="timer" size={32} color="#4ecdc4" />
         <Text style={styles.title}>Toque Longo</Text>
         <Text style={styles.subtitle}>Segure por 1 segundo para ativar</Text>
       </View>
 
+      {/* Message Display */}
       <Animated.View style={styles.messageContainer}>
         <Text style={[styles.message, { color: getMessageColor() }]}>
           {message}
@@ -127,6 +130,7 @@ export default function LongPress() {
         <Text style={styles.counter}>Toques longos: {pressCount}</Text>
       </Animated.View>
 
+      {/* Progress Bar */}
       <View style={styles.progressContainer}>
         <View style={styles.progressBackground}>
           <Animated.View
@@ -144,6 +148,7 @@ export default function LongPress() {
         </Text>
       </View>
 
+      {/* Interactive Box */}
       <LongPressGestureHandler
         onHandlerStateChange={onLongPress}
         minDurationMs={1000}
@@ -173,6 +178,7 @@ export default function LongPress() {
             </Text>
           </View>
 
+          {/* Timer indicator */}
           {isPressed && (
             <View style={styles.timerIndicator}>
               <Ionicons name="time" size={16} color="#ffffff" />
@@ -182,6 +188,7 @@ export default function LongPress() {
         </Animated.View>
       </LongPressGestureHandler>
 
+      {/* Instructions */}
       <View style={styles.instructions}>
         <View style={styles.instructionItem}>
           <Ionicons name="information-circle" size={16} color="#4ecdc4" />
@@ -197,6 +204,7 @@ export default function LongPress() {
         </View>
       </View>
 
+      {/* Achievement Badge */}
       {pressCount >= 5 && (
         <View style={styles.achievement}>
           <Ionicons name="trophy" size={24} color="#ffd93d" />
