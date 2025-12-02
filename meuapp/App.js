@@ -26,6 +26,7 @@ import StorageExternal from "./screens/StorageExternal";
 import Mapa from "./screens/Mapa";
 import Menu from "./screens/Menu";
 import LongPress from "./screens/LongPress";
+import Sms from "./screens/Sms";
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -87,6 +88,9 @@ const getDrawerIcon = (routeName, focused, color, size) => {
     case "StorageExternal":
       iconName = focused ? "document" : "document-outline";
       break;
+    case "Sms":
+      iconName = focused ? "sms" : "message-outline";
+      break;  
     default:
       iconName = focused ? "square" : "square-outline";
   }
@@ -265,6 +269,13 @@ function MainDrawer() {
           component={FlatList}
           options={{
             title: "📋 Lista",
+          }}
+        />
+        <Drawer.Screen
+          name="Sms"
+          component={Sms}
+          options={{
+            title: "✍️ SMS",
           }}
         />
       </Drawer.Group>
